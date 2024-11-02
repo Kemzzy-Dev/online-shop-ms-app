@@ -1,0 +1,53 @@
+
+services:
+  adservice:
+    build: ./src/adservice
+
+  cartservice:
+    build: ./src/cartservice/src
+
+  checkoutservice:
+    build: ./src/checkoutservice
+    env_file:
+      - ./src/.env
+
+  currencyservice:
+    build: ./src/currencyservice
+    environment:
+      - PORT=7000
+    env_file:
+      - ./src/.env
+
+  emailservice:
+    build: ./src/emailservice
+
+  frontend:
+    build: ./src/frontend
+    env_file:
+      - ./src/.env
+    ports:
+      - "80:8080"
+  
+  loadgenerator:
+    build: ./src/loadgenerator
+
+  paymentservice:
+    build: ./src/paymentservice
+    environment:
+      - PORT=50052
+    env_file:
+      - ./src/.env
+
+  productcatalogservice:
+    build: ./src/productcatalogservice
+
+  recommendationservice:
+    build: ./src/recommendationservice
+    env_file:
+      - ./src/.env
+  
+  shippingservice:
+    build: ./src/shippingservice
+    env_file:
+      - ./src/.env
+  
