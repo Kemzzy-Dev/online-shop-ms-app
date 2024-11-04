@@ -1,0 +1,44 @@
+pipeline {
+  agent {
+    docker {image 'gradle:4-jdk-8'}
+  }
+
+  stages {
+
+    stage('Pull changes') {
+      steps {
+        git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
+      }
+    }
+
+    stage('SonarQube analysis') {
+      steps {
+        withSonarQubeEnv('sonarqube') {
+          sh 'sonar-scanner'
+        }
+      }
+    }
+
+    // stage('Build Docker image') {
+    //   steps {
+    //     script {
+    //       def dockerfile = sh(script: 'cat Dockerfile', returnStdout: true).trim()
+
+    //       def image = docker.build("your-dockerhub-username/your-image-name", "-f $dockerfile .")
+    //     }
+    //   }
+    // }
+
+    // stage('Push Docker image') {
+    //   steps {
+    //     script {
+    //       docker.withRegistry('https://registry.hub.docker.com', 'your-dockerhub-username') {
+    //         image.push('latest')
+    //         image.push("${env.BUILD_NUMBER}")
+    //         image.push("${env.BUILD_ID}")
+    //       }
+    //     }
+    //   }
+    // }
+  }
+}
