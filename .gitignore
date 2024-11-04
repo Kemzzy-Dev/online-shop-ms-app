@@ -1,2 +1,4 @@
 terraform_infra/
 /src/.env
+jenkins_config/
+jenkins_server.sh

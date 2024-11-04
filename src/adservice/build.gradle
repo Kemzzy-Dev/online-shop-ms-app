@@ -3,11 +3,19 @@ plugins {
     id 'com.github.sherter.google-java-format' version '0.9'
     id 'idea'
     id 'application'
+    id "org.sonarqube" version "5.1.0.4882"
 }
 
 repositories {
     mavenCentral()
     mavenLocal()
+}
+
+sonar {
+  properties {
+    property "sonar.projectKey", "microservice-scan"
+    property "sonar.projectName", "microservice-scan"
+  }
 }
 
 description = 'Ad Service'
