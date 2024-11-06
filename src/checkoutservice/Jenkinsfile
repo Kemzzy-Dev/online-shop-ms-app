@@ -11,6 +11,12 @@ pipeline {
       }
     }
 
+    stage('Install Java') {
+      steps {
+        sh 'apt-get install -y openjdk-11-jdk'
+      }
+    }
+
     stage('SonarQube Analysis') {
       environment {
         scannerHome = tool 'sonarqubescanner';
