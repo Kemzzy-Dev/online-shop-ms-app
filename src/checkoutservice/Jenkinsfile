@@ -1,33 +1,40 @@
 pipeline {
-  agent {
-    docker {image 'golang'}
-  }
+  agent none
 
   stages {
 
-    stage('Checkout code') {
-      steps {
-        git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
+    stage('Checkout and Scan') {
+      agent {
+        docker {image 'java:17-alpine'}
       }
-    }
-
-    stage('Install Java') {
-      steps {
-        sh 'apt-get update'
-        sh 'apt-get install -y openjdk-17-jre'
-      }
-    }
-
-    stage('SonarQube Analysis') {
       environment {
         scannerHome = tool 'sonarqubescanner';
       }
       steps {
+        git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
+
         withSonarQubeEnv(credentialsId: 'sonarqube_token', installationName: 'SonarQubeServer') {
           sh "${scannerHome}/bin/sonar-scanner"
         }
       }
     }
+
+    // stage('Install Java') {
+    //   steps {
+    //     sh 'apt-get update'
+    //     sh 'apt-get install -y openjdk-17-jre'code
+    //   }
+    // }
+
+    // stage('SonarQube Analysis') {
+    //   agent {
+    //     docker {image 'java:17-alpine'}
+    //   }
+      
+    //   steps {
+        
+    //   }
+    // }
 
     // stage('Build Docker image') {
     //   steps {
