@@ -5,7 +5,7 @@ pipeline {
 
     stage('Checkout and Scan') {
       agent {
-        docker {image 'java:17-alpine'}
+        docker {image 'openjdk'}
       }
       environment {
         scannerHome = tool 'sonarqubescanner';
