@@ -18,7 +18,7 @@ jobs:
           path: 'src/adservice'
 
       - name: Run SonarQube analysis
-        uses: sonarqube/sonarqube-github-action@v1
+        uses: sonarsource/sonarqube-scan-action@v3.0.0
         with:
           sonarqube-token: ${{ secrets.SONARQUBE_TOKEN }}
           sonarqube-url: https://631b-105-116-10-105.ngrok-free.app/
@@ -30,9 +30,9 @@ jobs:
           docker build -t adservice:latest .
 
       - name: Run Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@v0.9.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          image: adservice:latest
+          image-ref: adservice:latest
           format: json
           output: trivy-output.json
 
