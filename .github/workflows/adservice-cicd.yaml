@@ -43,6 +43,7 @@ jobs:
             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           pwd
+          ls
           /adservice/gradlew build sonar --info
 
       - name: Build Docker image
