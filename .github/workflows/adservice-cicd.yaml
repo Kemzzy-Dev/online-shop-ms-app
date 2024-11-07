@@ -17,13 +17,31 @@ jobs:
         with:
           path: 'src/adservice'
 
-      - name: Run SonarQube analysis
-        uses: sonarsource/sonarqube-scan-action@v3.0.0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          sonarqube-token: ${{ secrets.SONARQUBE_TOKEN }}
-          sonarqube-url: https://631b-105-116-10-105.ngrok-free.app/
-          sonarqube-project-key: microservice-scan
-          sonarqube-project-name: microservice scan
+            java-version: 17
+            distribution: 'zulu' # Alternative distribution options are available.
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+            path: ~/.sonar/cache
+            key: ${{ runner.os }}-sonar
+            restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+            path: ~/.gradle/caches
+            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+            restore-keys: ${{ runner.os }}-gradle
+
+      - name: Build and analyze
+        env:
+            SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+            SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: ./gradlew build sonar --info
 
       - name: Build Docker image
         run: |
