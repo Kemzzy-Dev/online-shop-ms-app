@@ -42,8 +42,7 @@ jobs:
             SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          pwd
-          src/adservice/gradlew build sonar --info
+          adservice/gradlew build sonar --info
 
       - name: Build Docker image
         run: |
