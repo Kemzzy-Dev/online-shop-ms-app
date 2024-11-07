@@ -41,7 +41,7 @@ jobs:
             SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd src/adservice 
-          chmod +x gredlew
+          chmod +x ./gradlew
           ./gradlew build sonar --info
 
       - name: Build Docker image
