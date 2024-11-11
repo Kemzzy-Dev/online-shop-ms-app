@@ -1,4 +1,4 @@
-name: Checkout Service CI/CD
+name: Shipping Service CI/CD
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - src/checkoutservice/**
+      - src/shippingservice/**
 
 jobs:
   build-and-deploy:
@@ -17,9 +17,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Navigate to src/checkoutservice
+      - name: Navigate to src/shippingservice
         run: |
-          cd src/checkoutservice
+          cd src/shippingservice
 
       - name: Scan Code
         uses: sonarsource/sonarqube-scan-action@v3.1.0
@@ -29,12 +29,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t cartservice:latest .
+          docker build -t shippingservice:latest .
 
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: cartservice:latest
+          image-ref: shippingservice:latest
           format: json
           output: trivy-output.json
 
