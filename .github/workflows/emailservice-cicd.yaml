@@ -23,9 +23,21 @@ jobs:
 
       - name: Scan Code
         uses: sonarsource/sonarqube-scan-action@v3.1.0
+        with:
+          projectBaseDir: src/emailservice
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+    
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
 
       - name: Build Docker image
         run: |
@@ -37,6 +49,10 @@ jobs:
           image-ref: emailservice:latest
           format: json
           output: trivy-output.json
+
+      - name: Push Docker image
+        run: |
+          docker push emailservice:latest
 
     #   - name: Push image to DockerHub
     #     uses: docker/login-action@v1
