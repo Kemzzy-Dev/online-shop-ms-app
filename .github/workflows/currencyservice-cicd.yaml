@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - src/checkoutservice/**
+      - src/currencyservice/**
 
 jobs:
   build-and-deploy:
@@ -17,7 +17,7 @@ jobs:
 
       - name: Navigate to src/checkoutservice
         run: |
-          cd src/checkoutservice
+          cd src/currencyservice
 
       - name: Scan Code
         uses: sonarsource/sonarqube-scan-action@v3.1.0
@@ -27,12 +27,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t cartservice:latest .
+          docker build -t currencyservice:latest .
 
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: cartservice:latest
+          image-ref: currencyservice:latest
           format: json
           output: trivy-output.json
 
