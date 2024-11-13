@@ -3,12 +3,14 @@ pipeline {
     label 'node1'
   }
 
-  stages {
-    when {
-      changeset "src/recommendationservice/**"
-    }
+  stages 
 
     stage('Checkout code') {
+
+      when {
+        changeset "src/recommendationservice/**"
+      }
+      
       steps {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }

@@ -4,11 +4,12 @@ pipeline {
   }
 
   stages {
-    when {
-      changeset "src/frontend/**"
-    }
 
     stage('Checkout code') {
+      when {
+        changeset "src/frontend/**"
+      } 
+      
       steps {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }
