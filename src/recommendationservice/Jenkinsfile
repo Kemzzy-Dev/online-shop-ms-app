@@ -4,6 +4,9 @@ pipeline {
   }
 
   stages {
+    when {
+      changeset "src/recommendationservice/**"
+    }
 
     stage('Checkout code') {
       steps {

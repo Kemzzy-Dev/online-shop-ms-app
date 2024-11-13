@@ -4,6 +4,9 @@ pipeline {
   }
 
   stages {
+    when {
+      changeset "src/adservice/**"
+    }
 
     stage('Checkout code') {
       steps {

@@ -4,6 +4,9 @@ pipeline {
   }
 
   stages {
+    when {
+      changeset "src/paymentservice/**"
+    }
 
     stage('Checkout code') {
       steps {

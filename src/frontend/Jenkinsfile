@@ -4,6 +4,9 @@ pipeline {
   }
 
   stages {
+    when {
+      changeset "src/frontend/**"
+    }
 
     stage('Checkout code') {
       steps {

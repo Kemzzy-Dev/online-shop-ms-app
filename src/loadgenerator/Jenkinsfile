@@ -4,6 +4,9 @@ pipeline {
   }
 
   stages {
+    when {
+      changeset "src/loadgenerator/**"
+    }
 
     stage('Checkout code') {
       steps {
