@@ -2,11 +2,11 @@ name: Shipping Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/shippingservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/shippingservice/**
 
 jobs:
   build-and-deploy:

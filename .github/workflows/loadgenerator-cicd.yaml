@@ -2,11 +2,11 @@ name: Load Generator Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/loadgenerator/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/loadgenerator/**
 
 jobs:
   build-and-deploy:

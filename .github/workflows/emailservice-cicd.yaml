@@ -2,11 +2,11 @@ name: Email Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/emailservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/emailservice/**
 
 jobs:
   build-and-deploy:

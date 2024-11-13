@@ -2,11 +2,11 @@ name: Productcatalogservice Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/productcatalogservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/productcatalogservice/**
 
 jobs:
   build-and-deploy:

@@ -2,11 +2,11 @@ name: Cart service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/cartservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/cartservice/**
 
 jobs:
   build-and-deploy:

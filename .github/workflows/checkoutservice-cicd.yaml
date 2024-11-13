@@ -2,11 +2,11 @@ name: Checkout Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/checkoutservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/checkoutservice/**
 
 jobs:
   build-and-deploy:

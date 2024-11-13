@@ -13,8 +13,8 @@ repositories {
 
 sonar {
   properties {
-    property "sonar.projectKey", "microservice-scan"
-    property "sonar.projectName", "microservice-scan"
+    property "sonar.projectKey", "adservice"
+    property "sonar.projectName", "adservice"
   }
 }
 

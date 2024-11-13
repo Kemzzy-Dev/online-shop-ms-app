@@ -2,11 +2,11 @@ name: Recommendation Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/recommendationservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/recommendationservice/**
 
 jobs:
   build-and-deploy:

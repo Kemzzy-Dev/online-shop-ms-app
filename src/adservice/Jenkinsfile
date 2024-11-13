@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    docker {image 'gradle'}
+    label 'node1'
   }
 
   stages {
@@ -12,8 +12,11 @@ pipeline {
     }
 
     stage('SonarQube analysis') {
+      environment {
+        scannerHome = tool 'sonarqubescanner';
+      }
       steps {
-        withSonarQubeEnv('SonarQubeServer') {
+        withSonarQubeEnv(credentialsId: 'sonarqube token', installationName: 'SonarQubeServer') {
           sh "./gradlew sonar"
         }
       }

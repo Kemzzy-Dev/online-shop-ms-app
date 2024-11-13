@@ -2,11 +2,11 @@ name: Currency Service CI/CD
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - src/currencyservice/**
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - src/currencyservice/**
 
 jobs:
   build-and-deploy:
