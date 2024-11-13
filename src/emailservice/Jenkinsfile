@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    docker {image 'gradle'}
+    label 'node1'
   }
 
   stages {
@@ -10,14 +10,36 @@ pipeline {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }
     }
-
+    
     stage('SonarQube analysis') {
+      environment {
+        scannerHome = tool 'sonarqubescanner';
+      }
       steps {
-        withSonarQubeEnv('SonarQubeServer') {
-          sh "./gradlew sonar"
+        withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'SonarQubeServer') {
+          dir('src/emailservice') {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
         }
       }
     }
+
+    // stage('Install Java') {
+    //   steps {
+    //     sh 'apt-get update'
+    //     sh 'apt-get install -y openjdk-17-jre'code
+    //   }
+    // }
+
+    // stage('SonarQube Analysis') {
+    //   agent {
+    //     docker {image 'java:17-alpine'}
+    //   }
+      
+    //   steps {
+        
+    //   }
+    // }
 
     // stage('Build Docker image') {
     //   steps {
