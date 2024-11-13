@@ -17,9 +17,8 @@ pipeline {
       }
       steps {
         withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'SonarQubeServer') {
-          dir('src/adservice') {
-            sh "chmod +x ./gradlew"
-            sh "./gradlew sonar"
+          dir('src/checkoutservice') {
+            sh "${scannerHome}/bin/sonar-scanner"
           }
         }
       }
