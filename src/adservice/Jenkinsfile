@@ -17,6 +17,7 @@ pipeline {
       }
       steps {
         withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'SonarQubeServer') {
+          sh "cd src/adservice"
           sh "./gradlew sonar"
         }
       }
