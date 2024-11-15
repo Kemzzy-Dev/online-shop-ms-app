@@ -3,7 +3,7 @@ pipeline {
     label 'node1'
   }
 
-  stages 
+  stages{
 
     stage('Checkout code') {
 
@@ -29,23 +29,7 @@ pipeline {
       }
     }
 
-    // stage('Install Java') {
-    //   steps {
-    //     sh 'apt-get update'
-    //     sh 'apt-get install -y openjdk-17-jre'code
-    //   }
-    // }
-
-    // stage('SonarQube Analysis') {
-    //   agent {
-    //     docker {image 'java:17-alpine'}
-    //   }
-      
-    //   steps {
-        
-    //   }
-    // }
-
+  
     // stage('Build Docker image') {
     //   steps {
     //     script {
