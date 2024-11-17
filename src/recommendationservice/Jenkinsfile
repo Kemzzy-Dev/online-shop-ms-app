@@ -3,20 +3,24 @@ pipeline {
     label 'node1'
   }
 
-  stages{
+  environment {
+    IMAGE_NAME = "recommendationservice"
+    IMAGE_TAG = "latest"
+    TRIVY_OUTPUT = "trivy-scan-report.txt"
+    DOCKERHUB_USERNAME = "kemzzy"
+  }
+
+
+  stages {
 
     stage('Checkout code') {
 
-      when {
-        changeset "src/recommendationservice/**"
-      }
-      
       steps {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }
     }
     
-    stage('SonarQube analysis') {
+    stage('Sonarqube Scan analysis') {
       environment {
         scannerHome = tool 'sonarqubescanner';
       }
@@ -29,27 +33,37 @@ pipeline {
       }
     }
 
-  
-    // stage('Build Docker image') {
-    //   steps {
-    //     script {
-    //       def dockerfile = sh(script: 'cat Dockerfile', returnStdout: true).trim()
+    stage('Build Docker image') {
+      steps {
+        script {
+          def image = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}", "./src/recommendationservice")
+        }
+      }
+    }
 
-    //       def image = docker.build("your-dockerhub-username/your-image-name", "-f $dockerfile .")
-    //     }
-    //   }
-    // }
+    stage('Scan Docker Image with Trivy') {
+      steps {
+        script {
+          sh """
+          trivy image \
+          --format json \
+          --output ${TRIVY_OUTPUT} \
+          --severity HIGH,CRITICAL \
+          ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+          """
+        }
+      }
+    }
 
-    // stage('Push Docker image') {
-    //   steps {
-    //     script {
-    //       docker.withRegistry('https://registry.hub.docker.com', 'your-dockerhub-username') {
-    //         image.push('latest')
-    //         image.push("${env.BUILD_NUMBER}")
-    //         image.push("${env.BUILD_ID}")
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Push Docker image') {
+      steps {
+        script {
+          // empty because we are using dockerhub
+          docker.withRegistry('', 'dockerhub-credentials') {
+            docker.image("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
+          }
+        }
+      }
+    }
   }
 }

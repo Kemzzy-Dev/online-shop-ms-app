@@ -1,49 +1,71 @@
 pipeline {
   agent {
-    docker {image 'mcr.microsoft.com/dotnet/sdk:latest'}
+    label 'node1'
   }
+
+  environment {
+    IMAGE_NAME = "cartservice"
+    IMAGE_TAG = "latest"
+    TRIVY_OUTPUT = "trivy-scan-report.txt"
+    DOCKERHUB_USERNAME = "kemzzy"
+  }
+
 
   stages {
 
     stage('Checkout code') {
 
-      when {
-        changeset "src/cartservice/**"
-      }
-
       steps {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }
     }
-
-    stage('SonarQube analysis') {
+    
+    stage('Sonarqube Scan analysis') {
+      environment {
+        scannerHome = tool 'SonarScanner for .NET';
+      }
       steps {
-        withSonarQubeEnv('SonarQubeServer') {
-          sh "./gradlew sonar"
+        withSonarQubeEnv(credentialsId: 'sonarqube', installationName: 'SonarQubeServer') {
+          dir('src/cartservice/src') {
+            bat "dotnet ${scannerHome}\\SonarScanner.MSBuild.dll begin /k:\"cartservice\""
+            bat "dotnet build"
+            bat "dotnet ${scannerHome}\\SonarScanner.MSBuild.dll end"
+          }
         }
       }
     }
 
-    // stage('Build Docker image') {
-    //   steps {
-    //     script {
-    //       def dockerfile = sh(script: 'cat Dockerfile', returnStdout: true).trim()
+    stage('Build Docker image') {
+      steps {
+        script {
+          def image = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}", "./src/cartservice/src")
+        }
+      }
+    }
 
-    //       def image = docker.build("your-dockerhub-username/your-image-name", "-f $dockerfile .")
-    //     }
-    //   }
-    // }
+    stage('Scan Docker Image with Trivy') {
+      steps {
+        script {
+          sh """
+          trivy image \
+          --format json \
+          --output ${TRIVY_OUTPUT} \
+          --severity HIGH,CRITICAL \
+          ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
+          """
+        }
+      }
+    }
 
-    // stage('Push Docker image') {
-    //   steps {
-    //     script {
-    //       docker.withRegistry('https://registry.hub.docker.com', 'your-dockerhub-username') {
-    //         image.push('latest')
-    //         image.push("${env.BUILD_NUMBER}")
-    //         image.push("${env.BUILD_ID}")
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Push Docker image') {
+      steps {
+        script {
+          // empty because we are using dockerhub
+          docker.withRegistry('', 'dockerhub-credentials') {
+            docker.image("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
+          }
+        }
+      }
+    }
   }
 }
