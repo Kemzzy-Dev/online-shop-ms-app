@@ -14,10 +14,6 @@ pipeline {
   stages {
 
     stage('Checkout code') {
-      // Monitors the checkoutservice folder for change and triggers the pipeline
-      when {
-        changeset "src/checkoutservice/**"
-      }
 
       steps {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
@@ -62,7 +58,7 @@ pipeline {
     stage('Push Docker image') {
       steps {
         script {
-          docker.withRegistry('https://hub.docker.com', 'dockerhub-credentials') {
+          docker.withRegistry('', 'dockerhub-credentials') {
             image.push("${IMAGE_TAG}")
           }
         }
