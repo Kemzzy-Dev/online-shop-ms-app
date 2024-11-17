@@ -60,7 +60,7 @@ pipeline {
         script {
           // empty because we are using dockerhub
           docker.withRegistry('', 'dockerhub-credentials') {
-            image.push()
+            docker.image("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}").push()
           }
         }
       }
