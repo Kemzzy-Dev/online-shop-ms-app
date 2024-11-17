@@ -19,6 +19,24 @@ pipeline {
         git branch: 'main', url: 'https://github.com/Kemzzy-Dev/online-shop-ms-app'
       }
     }
+
+    stage('Install .NET') {
+      steps {
+        script {
+          sh """
+              wget https://dot.net/v1/dotnet-install.sh
+              chmod +x dotnet-install.sh
+              ./dotnet-install.sh --version 7.0
+          """
+        }
+      }
+    }
+
+    stage('Restore Dependencies') {
+      steps {
+          sh 'dotnet restore cartservice.csproj'
+      }
+    }
     
     stage('Sonarqube Scan analysis') {
       environment {
