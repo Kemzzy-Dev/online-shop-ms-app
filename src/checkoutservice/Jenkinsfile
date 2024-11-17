@@ -6,7 +6,6 @@ pipeline {
   environment {
     IMAGE_NAME = "checkoutservice"
     IMAGE_TAG = "latest"
-    DOCKER_REGISTRY = "registry.hub.docker.com"
     TRIVY_OUTPUT = "trivy-scan-report.txt"
     DOCKERHUB_USERNAME = "kemzzy"
   }
@@ -25,7 +24,7 @@ pipeline {
       }
     }
     
-    stage('Scan code with Sonarqube') {
+    stage('Sonarqube Scan analysis') {
       environment {
         scannerHome = tool 'sonarqubescanner';
       }
@@ -41,7 +40,7 @@ pipeline {
     stage('Build Docker image') {
       steps {
         script {
-          def image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "./src/checkoutservice")
+          def image = docker.build("${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}", "./src/checkoutservice")
         }
       }
     }
@@ -54,23 +53,23 @@ pipeline {
           --format json \
           --output ${TRIVY_OUTPUT} \
           --severity HIGH,CRITICAL \
-          ${IMAGE_NAME}:${IMAGE_TAG}
+          ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}
           """
         }
       }
     }
 
-  //   stage('Push Docker image') {
-  //     steps {
-  //       script {
-  //         docker.withRegistry('https://registry.hub.docker.com', '${DOCKERHUB_USERNAME}') {
-  //           image.push('latest')
-  //           image.push("${env.BUILD_NUMBER}")
-  //           image.push("${env.BUILD_ID}")
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+    stage('Push Docker image') {
+      steps {
+        script {
+          docker.withRegistry('https://hub.docker.com', 'dockerhub-credentials') {
+            image.push("${IMAGE_TAG}")
+          }
+        }
+      }
+    }
+
+
+
   }
 }
