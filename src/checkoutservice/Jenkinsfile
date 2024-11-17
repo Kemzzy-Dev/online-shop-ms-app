@@ -58,14 +58,12 @@ pipeline {
     stage('Push Docker image') {
       steps {
         script {
+          // empty because we are using dockerhub
           docker.withRegistry('', 'dockerhub-credentials') {
-            image.push("${IMAGE_TAG}")
+            image.push()
           }
         }
       }
     }
-
-
-
   }
 }
